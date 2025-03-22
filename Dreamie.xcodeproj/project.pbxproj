@@ -166,6 +166,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use for AI gen model";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "img gen";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "img gen";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribing Dream text";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -192,6 +196,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use for AI gen model";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "img gen";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "img gen";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribing Dream text";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

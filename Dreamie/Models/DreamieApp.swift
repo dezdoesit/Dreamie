@@ -1,22 +1,18 @@
-//
-//  DreamieApp.swift
-//  Dreamie
-//
-//  Created by Dezmond Blair on 3/22/25.
-//
-
+// DreamieApp.swift
 import SwiftUI
 
 @main
 struct DreamieApp: App {
-
     @State private var appModel = AppModel()
+    @State private var dreamViewModel = DreamViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appModel)
+                .environment(dreamViewModel)
         }
+      
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()

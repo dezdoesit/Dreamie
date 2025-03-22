@@ -1,14 +1,9 @@
-//
-//  DreamDetialView.swift
-//  Dreamie
-//
-//  Created by Dezmond Blair on 3/22/25.
-//
 import SwiftUI
 
 struct DreamDetailView: View {
     let dream: DreamEntry
     @Environment(\.dismiss) private var dismiss
+    @State private var showingSpatialView = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -42,8 +37,25 @@ struct DreamDetailView: View {
             .cornerRadius(10)
             .padding(.horizontal)
             
+            Button {
+                showingSpatialView = true
+            } label: {
+                Label("Visualize as Spatial Photo", systemImage: "sparkles.rectangle.stack")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue.opacity(0.2))
+                    .cornerRadius(10)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal)
+            
             Spacer()
         }
         .frame(width: 700, height: 500)
+        .sheet(isPresented: $showingSpatialView) {
+            SpatialPhotoView(dream: dream)
+                .environment(SpatialPhotoViewModel())
+        }
     }
 }

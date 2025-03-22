@@ -5,15 +5,16 @@ import SwiftUI
 struct DreamieApp: App {
     @State private var appModel = AppModel()
     @State private var dreamViewModel = DreamViewModel()
+    @State private var spatialPhotoViewModel = SpatialPhotoViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appModel)
                 .environment(dreamViewModel)
+                .environment(spatialPhotoViewModel)
         }
       
-
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
                 .environment(appModel)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D2AD5F32D8F389200CD58FE /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 0D2AD5F22D8F389200CD58FE /* RealityKitContent */; };
+		3AB317A72D8F6DC6004C9182 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3AB317A62D8F6DC6004C9182 /* OpenAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AB317A72D8F6DC6004C9182 /* OpenAI in Frameworks */,
 				0D2AD5F32D8F389200CD58FE /* RealityKitContent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,6 +96,7 @@
 			name = Dreamie;
 			packageProductDependencies = (
 				0D2AD5F22D8F389200CD58FE /* RealityKitContent */,
+				3AB317A62D8F6DC6004C9182 /* OpenAI */,
 			);
 			productName = Dreamie;
 			productReference = 0D2AD5ED2D8F389200CD58FE /* Dreamie.app */;
@@ -123,6 +126,9 @@
 			);
 			mainGroup = 0D2AD5E42D8F389200CD58FE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3AB317A52D8F6DC6004C9182 /* XCRemoteSwiftPackageReference "OpenAI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0D2AD5EE2D8F389200CD58FE /* Products */;
 			projectDirPath = "";
@@ -356,10 +362,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		3AB317A52D8F6DC6004C9182 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		0D2AD5F22D8F389200CD58FE /* RealityKitContent */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RealityKitContent;
+		};
+		3AB317A62D8F6DC6004C9182 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AB317A52D8F6DC6004C9182 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

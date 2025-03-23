@@ -40,7 +40,8 @@ struct DreamDetailView: View {
             Button {
                 showingSpatialView = true
             } label: {
-                Label("Visualize as Spatial Photo", systemImage: "sparkles.rectangle.stack")
+                // GENERATE AI IMAGE HERE MAYBE
+                Label("Visualize Photo", systemImage: "sparkles.rectangle.stack")
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Photos
+import QuickLook
 
 @MainActor
 @Observable
@@ -18,6 +19,7 @@ class SpatialPhotoViewModel {
     var isProcessing = false
     var spatialPhotos: [SpatialPhoto] = []
     var errorMessage: String?
+    var spawnView: URL?
     
     init() {
         Task {
@@ -39,6 +41,10 @@ class SpatialPhotoViewModel {
     ///   - imageData: The source image data
     ///   - dreamId: The ID of the associated dream entry
     /// - Returns: The created spatial photo or nil if creation failed
+    ///
+    func SPAWNVIEW() async {
+        try? await PreviewApplication.open(urls: [spawnView!])
+    }
     func createSpatialPhoto(from imageData: Data, for dreamId: UUID) async -> SpatialPhoto? {
         isProcessing = true
         defer { isProcessing = false }
@@ -46,8 +52,10 @@ class SpatialPhotoViewModel {
         do {
             // Convert the image to a spatial photo
             let spatialPhotoURL = try await converter.convertToSpatialPhoto(inputImage: imageData)
-            
+            spawnView = spatialPhotoURL
+            saveToPhotoLibrary(from: spatialPhotoURL)
             // Save the spatial photo and its metadata
+            
             let spatialPhoto = try await photoService.saveSpatialPhoto(from: spatialPhotoURL, for: dreamId)
             
             // Reload the list of spatial photos
@@ -57,6 +65,39 @@ class SpatialPhotoViewModel {
         } catch {
             errorMessage = "Failed to create spatial photo: \(error.localizedDescription)"
             return nil
+        }
+    }
+    private func saveToPhotoLibrary(from url: URL) {
+        // Request authorization to access the photo library
+        PHPhotoLibrary.requestAuthorization { status in
+            switch status {
+            case .authorized:
+                // Save the image to the photo library WITH metadata intact
+                PHPhotoLibrary.shared().performChanges({
+                    let creationRequest = PHAssetCreationRequest.forAsset()
+                    creationRequest.addResource(with: .photo, fileURL: url, options: nil)
+                }) { success, error in
+                    DispatchQueue.main.async {
+                        if success {
+                            self.errorMessage = "Spatial image saved successfully!"
+                        } else if let error = error {
+                            self.errorMessage = "Failed to save: \(error.localizedDescription)"
+                        }
+                    }
+                }
+            case .denied, .restricted:
+                DispatchQueue.main.async {
+                    self.errorMessage = "Access to photo library is denied"
+                }
+            case .notDetermined, .limited:
+                DispatchQueue.main.async {
+                    self.errorMessage = "Access to photo library not determined"
+                }
+            @unknown default:
+                DispatchQueue.main.async {
+                    self.errorMessage = "Unknown error accessing photo library"
+                }
+            }
         }
     }
     
@@ -80,17 +121,6 @@ class SpatialPhotoViewModel {
             await loadSpatialPhotos()
         } catch {
             errorMessage = "Failed to delete spatial photo: \(error.localizedDescription)"
-        }
-    }
-    
-    /// Deletes all spatial photos associated with a dream entry
-    /// - Parameter dreamId: The ID of the dream entry
-    func deleteSpatialPhotos(for dreamId: UUID) async {
-        do {
-            try await photoService.deleteSpatialPhotos(for: dreamId)
-            await loadSpatialPhotos()
-        } catch {
-            errorMessage = "Failed to delete spatial photos: \(error.localizedDescription)"
         }
     }
 }

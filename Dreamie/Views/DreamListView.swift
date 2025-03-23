@@ -39,6 +39,7 @@ struct DreamListView: View {
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                     .lineLimit(2)
+                                
                             }
                             .padding(.vertical, 5)
                         }

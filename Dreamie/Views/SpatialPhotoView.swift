@@ -11,6 +11,10 @@ import UniformTypeIdentifiers
 import Photos
 import GoogleGenerativeAI
 
+
+
+   
+
 struct SpatialPhotoView: View {
     var dream: DreamEntry
     @Environment(SpatialPhotoViewModel.self) private var viewModel

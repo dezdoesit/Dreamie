@@ -14,27 +14,39 @@ struct DreamListView: View {
     @State private var calendarId = UUID() // For forcing calendar refresh
     
     var body: some View {
+        ZStack {
+            RadialGradient(
+                gradient: Gradient(colors: [
+                    Color.black,
+                    Color.purple.opacity(0.8),
+                    Color.black
+                ]),
+                center: .center,
+                startRadius: 560,
+                endRadius: 880
+            )
+            .edgesIgnoringSafeArea(.all)
         VStack {
             Text("Your Dreams")
                 .font(.largeTitle)
                 .padding(.vertical, 15)
             
             // Calendar view
-             CalendarView(selectedDate: $selectedDate, dreamsPerDay: viewModel.dreamsGroupedByDay)
-                 .padding(.horizontal)
-                 .padding(.top, 30)
-                 .frame(minHeight: 300, maxHeight: 300)
+            CalendarView(selectedDate: $selectedDate, dreamsPerDay: viewModel.dreamsGroupedByDay)
+                .padding(.horizontal)
+                .padding(.top, 30)
+                .frame(minHeight: 300, maxHeight: 300)
             
-                 .fixedSize(horizontal: false, vertical: true)
-                 .id(calendarId) // Force refresh when dream data changes
-             
-             // Date header
-             Text(selectedDate.formatted(date: .complete, time: .omitted))
-                 .font(.headline)
-                 .padding(.top,30)
-             
-             // Dreams for selected date
-             if let dreamsForDay = viewModel.dreamsGroupedByDay[Calendar.current.startOfDay(for: selectedDate)], !dreamsForDay.isEmpty {
+                .fixedSize(horizontal: false, vertical: true)
+                .id(calendarId) // Force refresh when dream data changes
+            
+            // Date header
+            Text(selectedDate.formatted(date: .complete, time: .omitted))
+                .font(.headline)
+                .padding(.top,30)
+            
+            // Dreams for selected date
+            if let dreamsForDay = viewModel.dreamsGroupedByDay[Calendar.current.startOfDay(for: selectedDate)], !dreamsForDay.isEmpty {
                 List {
                     ForEach(dreamsForDay) { dream in
                         Button {
@@ -63,7 +75,8 @@ struct DreamListView: View {
                 }.padding(.top,30)
             }
         }
-     
+        .padding()
+        
         .sheet(item: $selectedDream) { dream in
             DreamDetailView(dream: dream)
         }
@@ -72,5 +85,6 @@ struct DreamListView: View {
                 await viewModel.loadDreams()
             }
         }
+    }
     }
 }

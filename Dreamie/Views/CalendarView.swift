@@ -60,7 +60,7 @@
                      }
                  }
              }
-         }
+         }.padding()
          .onChange(of: selectedDate) { _, _ in
              // If selected date is in a different month, update current month
              if !Calendar.current.isDate(selectedDate, equalTo: currentMonth, toGranularity: .month) {

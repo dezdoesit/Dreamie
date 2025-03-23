@@ -13,6 +13,18 @@ struct DreamRecordingView: View {
     @State private var showingSaveDialog = false
     
     var body: some View {
+        ZStack {
+            RadialGradient(
+                gradient: Gradient(colors: [
+                    Color.black,
+                    Color.purple.opacity(0.8),
+                    Color.black
+                ]),
+                center: .center,
+                startRadius: 560,
+                endRadius: 880
+            )
+            .edgesIgnoringSafeArea(.all)
         VStack(spacing: 20) {
             Text("Record Your Dream")
                 .font(.largeTitle)
@@ -46,9 +58,16 @@ struct DreamRecordingView: View {
                     Label(viewModel.recordingStatus, systemImage: viewModel.isRecording ? "stop.circle.fill" : "mic.circle.fill")
                         .font(.title2)
                         .padding()
-                        .background(viewModel.isRecording ? Color.red.opacity(0.2) : Color.blue.opacity(0.2))
-                        .cornerRadius(15)
+
+                        
                 }
+                .background(
+                    viewModel.isRecording
+                    ? Color.red.opacity(0.2)  // Red background when recording
+                    : Color.purple.opacity(0.8)  // Purple background when not recording
+                )
+                .cornerRadius(15)
+                .frame(maxWidth: .infinity, minHeight: 60)
                 .disabled(viewModel.authorizationStatus != .authorized)
                 
                 if !viewModel.transcribedText.isEmpty {
@@ -78,5 +97,6 @@ struct DreamRecordingView: View {
             SaveDreamView()
         }
         .padding()
+    }
     }
 }

@@ -17,13 +17,28 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // Home tab
-            VStack {
-                PickerView()
-
-                
-                
+            
+            ZStack {
+                RadialGradient(
+                    gradient: Gradient(colors: [
+                        Color.black,
+                        Color.purple.opacity(0.8),
+                        Color.black
+                    ]),
+                    center: .center,
+                    startRadius: 560,
+                    endRadius: 880
+                )
+                .edgesIgnoringSafeArea(.all)
+                VStack {
+                    PickerView()
+                    
+                }
             }
+            
+            
             .tabItem {
+                
                 Label("Home", systemImage: "house")
             }
             .tag(0)

@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 import Photos
 import GoogleGenerativeAI
 
-
+import AVFoundation
 
    
 
@@ -30,6 +30,18 @@ struct SpatialPhotoView: View {
     let model = GenerativeModel(name: "gemini-2.0-flash", apiKey: APIKey.default)
     
     var body: some View {
+        ZStack {
+            RadialGradient(
+                           gradient: Gradient(colors: [
+                               Color.black,
+                               Color.purple.opacity(0.8),
+                               Color.black
+                           ]),
+                           center: .center,
+                           startRadius: 200,
+                           endRadius: 600
+                       )
+                       .edgesIgnoringSafeArea(.all)
         VStack(spacing: 24) {
             Text("Dream Visualization")
                 .font(.largeTitle)
@@ -49,6 +61,7 @@ struct SpatialPhotoView: View {
                             print("Spawning?")
                             do{
                                 await viewModel.SPAWNVIEW()
+                                startTextToSpeech()
                             }
                         }
                         
@@ -57,14 +70,14 @@ struct SpatialPhotoView: View {
                             .font(.title3)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue.opacity(0.2))
+                            .foregroundStyle(.black)
+                            .background(Color.purple.opacity(0.8))
                             .cornerRadius(15)
                     }
                     .buttonStyle(.plain)
                     
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
                 .cornerRadius(16)
             } else if isGenerating {
                 // Currently generating
@@ -77,7 +90,7 @@ struct SpatialPhotoView: View {
                         .font(.headline)
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
+                
                 .cornerRadius(16)
             } else {
                 // Need to generate
@@ -98,13 +111,14 @@ struct SpatialPhotoView: View {
                             .font(.title3)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue.opacity(0.2))
+                            .foregroundStyle(.black)
+                            .background(Color.purple.opacity(0.8))
                             .cornerRadius(15)
                     }
                     .buttonStyle(.plain)
                 }
+                
                 .padding()
-                .background(Color.gray.opacity(0.1))
                 .cornerRadius(16)
             }
             
@@ -127,7 +141,6 @@ struct SpatialPhotoView: View {
                 .frame(maxHeight: 200)
             }
             .padding()
-            .background(Color.gray.opacity(0.1))
             .cornerRadius(16)
             
             Spacer()
@@ -138,7 +151,8 @@ struct SpatialPhotoView: View {
                 Text("Close")
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.gray.opacity(0.2))
+                    .foregroundStyle(.black)
+                    .background(Color.purple.opacity(0.8))
                     .cornerRadius(15)
             }
             .buttonStyle(.plain)
@@ -153,6 +167,7 @@ struct SpatialPhotoView: View {
         } message: {
             Text(errorMessage ?? "An unknown error occurred")
         }
+    }
     }
     
     private func loadExistingSpatialPhoto() async {
@@ -226,4 +241,11 @@ struct SpatialPhotoView: View {
                 }
             }
         }
+    
+     func startTextToSpeech() {
+         let speechSynthesizer = AVSpeechSynthesizer()
+           let speechUtterance = AVSpeechUtterance(string: dream.aiStory ?? "There is no story")
+           speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+           speechSynthesizer.speak(speechUtterance)
+       }
 }

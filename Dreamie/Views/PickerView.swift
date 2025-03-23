@@ -27,7 +27,6 @@ struct PickerView: View {
             PhotosPicker(selection: $selectedItem, matching: .spatialMedia) {
                 Text("Choose a spatial photo or video")
                     .padding()
-                    .background(Color.blue.opacity(0.2))
                     .cornerRadius(10)
             }
             

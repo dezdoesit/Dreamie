@@ -12,10 +12,14 @@ struct DreamEntry: Identifiable, Codable {
     var title: String
     var content: String
     var date: Date
+    var spatialPhotoData: Data?
+    var spatialPhotoURL: String?
     
-    init(title: String = "", content: String = "", date: Date = Date()) {
+    init(title: String = "", content: String = "", date: Date = Date(), spatialPhotoData: Data? = nil, spatialPhotoURL: String? = nil) {
         self.title = title
         self.content = content
         self.date = date
+        self.spatialPhotoData = spatialPhotoData
+        self.spatialPhotoURL = spatialPhotoURL
     }
 }

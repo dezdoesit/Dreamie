@@ -5,7 +5,7 @@ import SwiftUI
 struct DreamieApp: App {
     @State private var appModel = AppModel()
     @State private var dreamViewModel = DreamViewModel()
-    @State private var spatialPhotoViewModel = SpatialPhotoViewModel()
+    @State private var spatialPhotoViewModel = SpatialPhotoViewModel(dreamStorage: DreamStorageService())
 
     var body: some Scene {
         WindowGroup {

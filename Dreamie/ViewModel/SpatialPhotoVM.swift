@@ -20,12 +20,17 @@ class SpatialPhotoViewModel {
     var spatialPhotos: [SpatialPhoto] = []
     var errorMessage: String?
     var spawnView: URL?
+    private let dreamStorage: DreamStorageService
     
-    init() {
+    init(dreamStorage: DreamStorageService) {
+        self.dreamStorage = dreamStorage
         Task {
             await loadSpatialPhotos()
         }
-    }
+            
+        }
+
+    
     
     /// Loads all spatial photos from storage
     func loadSpatialPhotos() async {
@@ -43,30 +48,31 @@ class SpatialPhotoViewModel {
     /// - Returns: The created spatial photo or nil if creation failed
     ///
     func SPAWNVIEW() async {
+        print("SPAWNVIEW1", spawnView!)
         try? await PreviewApplication.open(urls: [spawnView!])
     }
     func createSpatialPhoto(from imageData: Data, for dreamId: UUID) async -> SpatialPhoto? {
-        isProcessing = true
-        defer { isProcessing = false }
-        
-        do {
-            // Convert the image to a spatial photo
-            let spatialPhotoURL = try await converter.convertToSpatialPhoto(inputImage: imageData)
-            spawnView = spatialPhotoURL
-            saveToPhotoLibrary(from: spatialPhotoURL)
-            // Save the spatial photo and its metadata
+            isProcessing = true
+            defer { isProcessing = false }
             
-            let spatialPhoto = try await photoService.saveSpatialPhoto(from: spatialPhotoURL, for: dreamId)
-            
-            // Reload the list of spatial photos
-            await loadSpatialPhotos()
-            
-            return spatialPhoto
-        } catch {
-            errorMessage = "Failed to create spatial photo: \(error.localizedDescription)"
-            return nil
+            do {
+                let spatialPhotoURL = try await converter.convertToSpatialPhoto(inputImage: imageData)
+                spawnView = spatialPhotoURL
+                saveToPhotoLibrary(from: spatialPhotoURL)
+                
+                let spatialPhoto = try await photoService.saveSpatialPhoto(from: spatialPhotoURL, for: dreamId)
+                
+                // Update the dream entry with the new spatial photo data and URL
+                try await dreamStorage.updateDream(id: dreamId, spatialPhotoData: imageData, spatialPhotoURL: spatialPhotoURL.absoluteString)
+                
+                await loadSpatialPhotos()
+                
+                return spatialPhoto
+            } catch {
+                errorMessage = "Failed to create spatial photo: \(error.localizedDescription)"
+                return nil
+            }
         }
-    }
     private func saveToPhotoLibrary(from url: URL) {
         // Request authorization to access the photo library
         PHPhotoLibrary.requestAuthorization { status in

@@ -1,11 +1,3 @@
-//
-//  DreamService.swift
-//  Dreamie
-//
-//  Created by Dezmond Blair on 3/22/25.
-//
-
-// DreamStorageService.swift
 import Foundation
 
 actor DreamStorageService {
@@ -19,7 +11,11 @@ actor DreamStorageService {
     
     func saveDream(_ dream: DreamEntry) async throws {
         var dreams = try await loadDreams()
-        dreams.append(dream)
+        if let index = dreams.firstIndex(where: { $0.id == dream.id }) {
+            dreams[index] = dream // Update existing dream
+        } else {
+            dreams.append(dream) // Add new dream
+        }
         try await saveDreams(dreams)
     }
     
@@ -41,5 +37,19 @@ actor DreamStorageService {
         var dreams = try await loadDreams()
         dreams.removeAll { $0.id == id }
         try await saveDreams(dreams)
+    }
+    
+    func updateDream(id: UUID, spatialPhotoData: Data?, spatialPhotoURL: String?) async throws {
+        var dreams = try await loadDreams()
+        if let index = dreams.firstIndex(where: { $0.id == id }) {
+            dreams[index].spatialPhotoData = spatialPhotoData
+            dreams[index].spatialPhotoURL = spatialPhotoURL
+            try await saveDreams(dreams)
+        }
+    }
+    
+    func getDream(with id: UUID) async throws -> DreamEntry? {
+        let dreams = try await loadDreams()
+        return dreams.first(where: { $0.id == id })
     }
 }

@@ -4,6 +4,11 @@ import SwiftUI
 import RealityKit
 import RealityKitContent
 import Photos
+import SwiftUI
+import QuickLook
+import PhotosUI
+
+
 
 struct ContentView: View {
     @State private var selectedTab = 0
@@ -13,8 +18,9 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             // Home tab
             VStack {
-                Text("Welcome to your dream world")
-                    .font(.largeTitle)
+                PickerView()
+
+                
                 
             }
             .tabItem {
@@ -45,3 +51,5 @@ struct ContentView: View {
         .environment(AppModel())
         .environment(DreamViewModel())
 }
+
+

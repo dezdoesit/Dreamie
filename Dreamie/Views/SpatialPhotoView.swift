@@ -8,6 +8,7 @@
 import SwiftUI
 import QuickLook
 import UniformTypeIdentifiers
+import Photos
 
 struct SpatialPhotoView: View {
     let dream: DreamEntry
@@ -34,6 +35,15 @@ struct SpatialPhotoView: View {
                     
                     Button {
                         previewURL = photo.url
+                        
+                        //SPAWN IN VIEW
+                        Task {
+                            print("Spawning?")
+                            do{
+                                await viewModel.SPAWNVIEW()
+                            }
+                        }
+
                     } label: {
                         Label("View in Spatial", systemImage: "eyes")
                             .font(.title3)
@@ -43,7 +53,7 @@ struct SpatialPhotoView: View {
                             .cornerRadius(15)
                     }
                     .buttonStyle(.plain)
-                    .quickLookPreview($previewURL)
+                    
                 }
                 .padding()
                 .background(Color.gray.opacity(0.1))
@@ -149,12 +159,12 @@ struct SpatialPhotoView: View {
             // For now, we'll create a simple gradient image as a placeholder
             if let imageData = createSampleImage() {
                 spatialPhoto = await viewModel.createSpatialPhoto(from: imageData, for: dream.id)
-                
                 if spatialPhoto == nil {
                     errorMessage = viewModel.errorMessage
                     showErrorAlert = true
                 }
             } else {
+                
                 errorMessage = "Failed to create sample image"
                 showErrorAlert = true
             }
@@ -164,60 +174,17 @@ struct SpatialPhotoView: View {
     // TEMPORARY: Creates a sample image for testing
     // In a real app, you would get this from your generative AI model
     private func createSampleImage() -> Data? {
-        let size = CGSize(width: 1024, height: 1024)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        
-        let image = renderer.image { context in
-            let colors: [UIColor] = [
-                .systemBlue, .systemPurple, .systemPink
-            ]
-            
-            let rect = CGRect(origin: .zero, size: size)
-            
-            // Create a gradient background
-            let gradient = CAGradientLayer()
-            gradient.frame = rect
-            gradient.colors = colors.map { $0.cgColor }
-            gradient.startPoint = CGPoint(x: 0, y: 0)
-            gradient.endPoint = CGPoint(x: 1, y: 1)
-            gradient.render(in: context.cgContext)
-            
-            // Add some dream-like elements
-            let numShapes = 20
-            for _ in 0..<numShapes {
-                let x = CGFloat.random(in: 0...size.width)
-                let y = CGFloat.random(in: 0...size.height)
-                let diameter = CGFloat.random(in: 10...100)
-                let opacity = CGFloat.random(in: 0.1...0.7)
-                
-                context.cgContext.setFillColor(UIColor.white.withAlphaComponent(opacity).cgColor)
-                context.cgContext.fillEllipse(in: CGRect(x: x, y: y, width: diameter, height: diameter))
+        // Try to get the file URL for the resource
+        if let fileURL = Bundle.main.url(forResource: "sample2", withExtension: "jpg") {
+            print("MAKING PHOTO")
+            do {
+                // Read the file data directly
+                let imageData = try Data(contentsOf: fileURL)
+                return imageData
+            } catch {
+                print("Error loading HEIC file: \(error)")
             }
-            
-            // Add text based on dream content
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .center
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 24, weight: .light),
-                .foregroundColor: UIColor.white.withAlphaComponent(0.8),
-                .paragraphStyle: paragraphStyle
-            ]
-            
-            // Extract some keywords from the dream
-            let words = dream.content
-                .components(separatedBy: .whitespacesAndNewlines)
-                .filter { $0.count > 4 }
-                .prefix(5)
-            
-            let dreamText = words.joined(separator: " • ")
-            dreamText.draw(
-                with: CGRect(x: size.width * 0.1, y: size.height * 0.5 - 20, width: size.width * 0.8, height: 40),
-                options: .usesLineFragmentOrigin,
-                attributes: attributes,
-                context: nil
-            )
         }
-        
-        return image.pngData()
+        return nil
     }
 }

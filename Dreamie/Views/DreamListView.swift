@@ -10,6 +10,8 @@ import SwiftUI
 struct DreamListView: View {
     @Environment(DreamViewModel.self) private var viewModel
     @State private var selectedDream: DreamEntry?
+    @State private var selectedDate: Date = Date()
+    @State private var calendarId = UUID() // For forcing calendar refresh
     
     var body: some View {
         VStack {
@@ -17,13 +19,21 @@ struct DreamListView: View {
                 .font(.largeTitle)
                 .padding(.top)
             
-            if viewModel.dreamEntries.isEmpty {
-                Text("No dreams recorded yet")
-                    .foregroundColor(.gray)
-                    .padding()
-            } else {
+            // Calendar view
+             CalendarView(selectedDate: $selectedDate, dreamsPerDay: viewModel.dreamsGroupedByDay)
+                 .padding(.horizontal)
+                 .frame(height: 300)
+                 .id(calendarId) // Force refresh when dream data changes
+             
+             // Date header
+             Text(selectedDate.formatted(date: .complete, time: .omitted))
+                 .font(.headline)
+                 .padding(.top)
+             
+             // Dreams for selected date
+             if let dreamsForDay = viewModel.dreamsGroupedByDay[Calendar.current.startOfDay(for: selectedDate)], !dreamsForDay.isEmpty {
                 List {
-                    ForEach(viewModel.dreamEntries.sorted(by: { $0.date > $1.date })) { dream in
+                    ForEach(dreamsForDay) { dream in
                         Button {
                             selectedDream = dream
                         } label: {
@@ -31,7 +41,7 @@ struct DreamListView: View {
                                 Text(dream.title)
                                     .font(.headline)
                                 
-                                Text(dream.date.formatted(date: .abbreviated, time: .shortened))
+                                Text(dream.date.formatted(date: .omitted, time: .shortened))
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                 
@@ -39,7 +49,6 @@ struct DreamListView: View {
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                     .lineLimit(2)
-                                
                             }
                             .padding(.vertical, 5)
                         }

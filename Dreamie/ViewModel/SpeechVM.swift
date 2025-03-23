@@ -18,6 +18,11 @@ class DreamViewModel {
     var transcribedText = ""
     var recordingStatus = "Tap to start recording"
     var authorizationStatus: SFSpeechRecognizerAuthorizationStatus = .notDetermined
+    var dreamsGroupedByDay: [Date: [DreamEntry]] {
+             Dictionary(grouping: dreamEntries) { dream in
+                 Calendar.current.startOfDay(for: dream.date)
+             }
+         }
     
     init() {
         Task {
@@ -154,4 +159,14 @@ class DreamViewModel {
             print("Error deactivating audio session: \(error)")
         }
     }
+    func deleteDream(withId id: UUID) {
+            Task {
+                do {
+                    try await storageService.deleteDream(with: id)
+                    await loadDreams()
+                } catch {
+                    print("Error deleting dream: \(error)")
+                }
+            }
+        }
 }

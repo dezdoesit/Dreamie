@@ -51,6 +51,14 @@ class SpatialPhotoViewModel {
         print("SPAWNVIEW1", spawnView!)
         try? await PreviewApplication.open(urls: [spawnView!])
     }
+    func saveStory(Story: String, for dreamID: UUID) async -> Void{
+        do{
+            try await dreamStorage.updateStory(id: dreamID, Story: Story)
+           
+        }catch{
+            print(error.localizedDescription)
+        }
+    }
     func createSpatialPhoto(from imageData: Data, for dreamId: UUID) async -> SpatialPhoto? {
             isProcessing = true
             defer { isProcessing = false }

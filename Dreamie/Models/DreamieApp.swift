@@ -15,6 +15,7 @@ struct DreamieApp: App {
                 .environment(spatialPhotoViewModel)
         }
       
+        
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
                 .environment(appModel)

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0D2AD5F32D8F389200CD58FE /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 0D2AD5F22D8F389200CD58FE /* RealityKitContent */; };
 		3AB317A72D8F6DC6004C9182 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3AB317A62D8F6DC6004C9182 /* OpenAI */; };
+		3AB319182D8FD4AF004C9182 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3AB319172D8FD4AF004C9182 /* GoogleGenerativeAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AB319182D8FD4AF004C9182 /* GoogleGenerativeAI in Frameworks */,
 				3AB317A72D8F6DC6004C9182 /* OpenAI in Frameworks */,
 				0D2AD5F32D8F389200CD58FE /* RealityKitContent in Frameworks */,
 			);
@@ -97,6 +99,7 @@
 			packageProductDependencies = (
 				0D2AD5F22D8F389200CD58FE /* RealityKitContent */,
 				3AB317A62D8F6DC6004C9182 /* OpenAI */,
+				3AB319172D8FD4AF004C9182 /* GoogleGenerativeAI */,
 			);
 			productName = Dreamie;
 			productReference = 0D2AD5ED2D8F389200CD58FE /* Dreamie.app */;
@@ -128,6 +131,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3AB317A52D8F6DC6004C9182 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				3AB319162D8FD4AF004C9182 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0D2AD5EE2D8F389200CD58FE /* Products */;
@@ -371,6 +375,14 @@
 				minimumVersion = 0.3.7;
 			};
 		};
+		3AB319162D8FD4AF004C9182 /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google-gemini/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -382,6 +394,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3AB317A52D8F6DC6004C9182 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
+		};
+		3AB319172D8FD4AF004C9182 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AB319162D8FD4AF004C9182 /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

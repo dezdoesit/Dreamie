@@ -47,6 +47,13 @@ actor DreamStorageService {
             try await saveDreams(dreams)
         }
     }
+    func updateStory(id: UUID, Story: String) async throws{
+        var dreams = try await loadDreams()
+        if let index = dreams.firstIndex(where: { $0.id == id }) {
+            dreams[index].aiStory = Story
+            try await saveDreams(dreams)
+        }
+    }
     
     func getDream(with id: UUID) async throws -> DreamEntry? {
         let dreams = try await loadDreams()

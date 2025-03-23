@@ -33,21 +33,23 @@ struct DreamDetailView: View {
             ScrollView {
                 Text(dream.content)
                     .padding()
-            }
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(10)
-            .padding(.horizontal)
+                Text(dream.aiStory ?? "")
+                    .padding()
+            
             
             // Display spatial photo thumbnail if available
             if let photoData = dream.spatialPhotoData, let uiImage = UIImage(data: photoData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 150)
+                    .frame(height: 300)
                     .cornerRadius(10)
                     .padding(.horizontal)
             }
-            
+            }
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(10)
+            .padding(.horizontal)
             Button {
                 if let urlString = dream.spatialPhotoURL, let url = URL(string: urlString) {
                     // If we already have a spatial photo, open it directly
